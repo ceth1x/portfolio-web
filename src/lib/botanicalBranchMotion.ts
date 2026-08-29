@@ -60,11 +60,11 @@ export type BranchMotionOptions = {
 function branchLaneWidth(mobile: boolean, layout: 'absolute' | 'fixed', override?: number) {
   if (override != null) return override
   if (layout === 'fixed') {
-    if (mobile) return 14
+    if (mobile) return 12
     if (typeof window !== 'undefined' && window.innerWidth < 900) return 18
     return 28
   }
-  return mobile ? 20 : 34
+  return mobile ? 18 : 34
 }
 
 /** About page — branch stays right on mobile; drifts left on desktop during approach. */
