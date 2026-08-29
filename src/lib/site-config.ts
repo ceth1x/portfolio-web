@@ -1,13 +1,13 @@
-const DEFAULT_SITE_URL = 'https://portfolio-web.vercel.app'
+const DEFAULT_SITE_URL = 'https://boumandigital.com'
 
 export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? DEFAULT_SITE_URL).replace(/\/$/, '')
 
 export const siteConfig = {
   name: 'Bouman Digital',
   personName: 'Philippe Bouman',
-  title: 'Bouman Digital · Developer portfolio',
+  title: 'Bouman Digital — Philippe Bouman · Frontend developer',
   description:
-    'Bouman Digital — portfolio by Philippe Bouman. Frontend developer and HBO Informatica student in Leiden, Netherlands. Web design, React, Next.js and interactive digital experiences.',
+    'Portfolio of Philippe Bouman, founder of Bouman Digital. Frontend developer and HBO Informatica student in Leiden, Netherlands — web design, React, Next.js and interactive digital experiences.',
   keywords: [
     'Bouman Digital',
     'Philippe Bouman',

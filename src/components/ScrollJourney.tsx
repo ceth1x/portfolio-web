@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import {useEffect, useRef, useState} from 'react'
+import {useEffect, useLayoutEffect, useRef, useState} from 'react'
 import type {SiteContent} from '@/content/site'
 import {BotanicalBranch} from '@/components/BotanicalBranch'
 import {OpeningScrollVisual} from '@/components/OpeningScrollVisual'
@@ -25,7 +25,9 @@ function clamp01(n: number) {
 }
 
 function chapterOpacity(p: number, enter: number, full: number, exit: number) {
-  if (p <= enter || p >= exit) return 0
+  if (p >= exit) return 0
+  if (p < enter) return 0
+  if (full <= enter) return 1
   if (p < full) return clamp01((p - enter) / Math.max(0.001, full - enter))
   // Hold briefly, then fade out before the next chapter peaks
   const fade = Math.max(0.001, exit - full)
@@ -80,7 +82,7 @@ export function ScrollJourney({content, reduce}: Props) {
     return () => mq.removeEventListener('change', update)
   }, [])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     initOpeningPaths(openingVisualRef.current)
     initBotanicalBranch(branchRef.current)
   }, [])
@@ -127,7 +129,7 @@ export function ScrollJourney({content, reduce}: Props) {
     }
   }, [reduce])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (reduce) return
     const track = trackRef.current
     if (!track) return
@@ -331,7 +333,7 @@ export function ScrollJourney({content, reduce}: Props) {
             className="journey-chapter journey-opening text-side-left"
             data-chapter="opening"
             data-in="0"
-            data-full="0.02"
+            data-full="0"
             data-out="0.12"
           >
             <div className="wrap zone-inner">

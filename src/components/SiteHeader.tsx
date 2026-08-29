@@ -58,7 +58,7 @@ export function SiteHeader({brandName}: Props) {
   return (
     <motion.header
       className={`site-header${scrolled ? ' is-scrolled' : ''}`}
-      initial={reduce ? false : {opacity: 0, y: -12}}
+      initial={false}
       animate={reduce ? undefined : {opacity: 1, y: 0}}
       transition={{duration: 0.75, ease: easeOut}}
     >

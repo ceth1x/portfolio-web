@@ -15,6 +15,14 @@ export const metadata: Metadata = {
     description:
       'About Philippe Bouman — frontend developer, HBO Informatica student in Leiden, and founder of Bouman Digital.',
     url: `${siteUrl}/about`,
+    images: [{url: siteConfig.ogImage, width: 1200, height: 1200, alt: `${siteConfig.name} logo`}],
+  },
+  twitter: {
+    card: 'summary',
+    title: `About · ${siteConfig.name}`,
+    description:
+      'About Philippe Bouman — frontend developer, HBO Informatica student in Leiden, and founder of Bouman Digital.',
+    images: [siteConfig.ogImage],
   },
 }
 

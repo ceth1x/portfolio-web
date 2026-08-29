@@ -15,6 +15,14 @@ export const metadata: Metadata = {
     description:
       'Contact Philippe Bouman at Bouman Digital for frontend development, web design and new project collaborations.',
     url: `${siteUrl}/contact`,
+    images: [{url: siteConfig.ogImage, width: 1200, height: 1200, alt: `${siteConfig.name} logo`}],
+  },
+  twitter: {
+    card: 'summary',
+    title: `Contact · ${siteConfig.name}`,
+    description:
+      'Contact Philippe Bouman at Bouman Digital for frontend development, web design and new project collaborations.',
+    images: [siteConfig.ogImage],
   },
 }
 

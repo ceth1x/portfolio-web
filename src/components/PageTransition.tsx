@@ -12,6 +12,7 @@ type Props = {
 export function PageTransition({children}: Props) {
   const pathname = usePathname()
   const reduce = useReducedMotion()
+  const isHome = pathname === '/'
 
   if (reduce) {
     return <div className="page-shell">{children}</div>
@@ -22,7 +23,7 @@ export function PageTransition({children}: Props) {
       <motion.div
         key={pathname}
         className="page-shell"
-        initial={{opacity: 0, y: 14}}
+        initial={isHome ? false : {opacity: 0, y: 14}}
         animate={{opacity: 1, y: 0}}
         exit={{opacity: 0, y: -10}}
         transition={{duration: 0.42, ease: easeOut}}
