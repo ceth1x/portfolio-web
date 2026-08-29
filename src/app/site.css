@@ -1106,6 +1106,11 @@ video {
 }
 
 @media (max-width: 768px) {
+  .journey {
+    --page-pad-x: clamp(1.75rem, 6.5vw, 2rem);
+    --mobile-branch-lane: clamp(2.35rem, 9.5vw, 2.75rem);
+  }
+
   .text-block,
   .text-side-right .text-block,
   .text-block-projects,
@@ -1207,6 +1212,29 @@ video {
     max-width: 3.25rem;
     left: auto !important;
     right: 0;
+  }
+
+  .journey .botanical-branch {
+    width: 12% !important;
+    max-width: 2.75rem;
+  }
+
+  .journey .zone-inner {
+    padding-top: calc(var(--header-h) + 1.5rem);
+    padding-bottom: 3rem;
+  }
+
+  .journey .name-stack {
+    margin-bottom: 1.15rem;
+  }
+
+  .journey .open-lead {
+    margin-top: 1.65rem;
+    padding-top: 1.5rem;
+  }
+
+  .journey .cta-row {
+    margin-top: 1.65rem;
   }
 
   .about-page .about-hero-copy,
