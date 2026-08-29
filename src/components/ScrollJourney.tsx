@@ -66,7 +66,7 @@ function botanicalSide(p: number) {
  * Direct DOM / rAF — no React state on scroll.
  */
 export function ScrollJourney({content, reduce}: Props) {
-  const {person, contact, opening, projects} = content
+  const {person, brand, contact, opening, projects} = content
 
   const trackRef = useRef<HTMLElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
@@ -322,7 +322,7 @@ export function ScrollJourney({content, reduce}: Props) {
       <div className="journey-static">
         <section className="section" id="top">
           <div className="wrap">
-            <p className="eyebrow">{person.name}</p>
+            <p className="eyebrow">{brand.name}</p>
             <h1 className="display-xl">
               I build
               <br />
@@ -465,8 +465,8 @@ export function ScrollJourney({content, reduce}: Props) {
             <div className="wrap zone-inner">
               <div className="text-block">
                 <p className="name-stack">
-                  <span>{person.firstName}</span>
-                  <span>{person.lastName}</span>
+                  <span>{brand.line1}</span>
+                  <span>{brand.line2}</span>
                 </p>
                 <h1 className="display-xl">
                   I build

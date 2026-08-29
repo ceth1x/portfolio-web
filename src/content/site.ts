@@ -14,6 +14,11 @@ export type Project = {
 }
 
 export type SiteContent = {
+  brand: {
+    name: string
+    line1: string
+    line2: string
+  }
   person: {
     name: string
     firstName: string
@@ -44,6 +49,11 @@ export type SiteContent = {
 }
 
 export const siteContent: SiteContent = {
+  brand: {
+    name: 'Bouman Digital',
+    line1: 'Bouman',
+    line2: 'Digital',
+  },
   person: {
     name: 'Philippe Bouman',
     firstName: 'Philippe',
@@ -68,8 +78,8 @@ export const siteContent: SiteContent = {
     text: 'Designing & building digital experiences.',
   },
   seo: {
-    title: 'Philippe Bouman · Developer portfolio',
+    title: 'Bouman Digital · Developer portfolio',
     description:
-      'Philippe Bouman — 19, HBO Informatica student in Leiden. Frontend, web design and interactive digital experiences.',
+      'Bouman Digital — portfolio by Philippe Bouman. 19, HBO Informatica student in Leiden. Frontend, web design and interactive digital experiences.',
   },
 }

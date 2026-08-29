@@ -15,7 +15,7 @@ export function SiteShell({content, children}: Props) {
   return (
     <>
       <div className="page-atmosphere" aria-hidden="true" />
-      <SiteHeader name={content.person.name} />
+      <SiteHeader brandName={content.brand.name} />
       <PageTransition>{children}</PageTransition>
       <SiteFooter content={content} />
     </>

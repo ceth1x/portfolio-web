@@ -6,7 +6,7 @@ import {useEffect, useState} from 'react'
 import {easeOut} from '@/lib/motion'
 
 type Props = {
-  name: string
+  brandName: string
 }
 
 const NAV = [
@@ -15,7 +15,7 @@ const NAV = [
   {href: '/contact', label: 'Contact'},
 ] as const
 
-export function SiteHeader({name}: Props) {
+export function SiteHeader({brandName}: Props) {
   const [scrolled, setScrolled] = useState(false)
   const [navOpen, setNavOpen] = useState(false)
   const reduce = useReducedMotion()
@@ -63,9 +63,9 @@ export function SiteHeader({name}: Props) {
       transition={{duration: 0.75, ease: easeOut}}
     >
       <div className="wrap header-inner">
-        <Link href="/" className="logo" aria-label={`${name} — home`} onClick={closeNav}>
+        <Link href="/" className="logo" aria-label={`${brandName} — home`} onClick={closeNav}>
           <span className="logo-mark" aria-hidden="true">
-            PB
+            BD
           </span>
         </Link>
 
