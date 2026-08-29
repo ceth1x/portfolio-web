@@ -1,10 +1,21 @@
 import type {Metadata} from 'next'
 import {ContactPage} from '@/components/ContactPage'
 import {siteContent} from '@/content/site'
+import {siteConfig, siteUrl} from '@/lib/site-config'
 
 export const metadata: Metadata = {
-  title: `Contact · ${siteContent.person.name}`,
-  description: 'Get in touch with Philippe Bouman.',
+  title: 'Contact',
+  description:
+    'Contact Philippe Bouman at Bouman Digital for frontend development, web design and new project collaborations.',
+  alternates: {
+    canonical: '/contact',
+  },
+  openGraph: {
+    title: `Contact · ${siteConfig.name}`,
+    description:
+      'Contact Philippe Bouman at Bouman Digital for frontend development, web design and new project collaborations.',
+    url: `${siteUrl}/contact`,
+  },
 }
 
 export default function Contact() {

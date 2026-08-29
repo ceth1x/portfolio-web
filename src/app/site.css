@@ -2218,3 +2218,45 @@ video {
 .mobile-bar {
   display: none !important;
 }
+
+/* ── Large desktop layout ── */
+
+@media (min-width: 1280px) {
+  :root {
+    --wrap-max: 80rem;
+  }
+
+  .text-block {
+    max-width: min(50%, var(--text-max));
+  }
+
+  .text-block-projects,
+  .zone-inner-wide .text-block-projects {
+    max-width: min(60%, 48rem);
+  }
+
+  .journey-contact .text-block {
+    max-width: min(50%, 52rem);
+  }
+
+  .contact-hero {
+    max-width: 58rem;
+  }
+}
+
+@media (min-width: 1536px) {
+  :root {
+    --wrap-max: 86rem;
+    --page-pad-x: clamp(2rem, 5vw, 6rem);
+  }
+
+  .text-block {
+    max-width: min(48%, 44rem);
+  }
+}
+
+@media (min-width: 1920px) {
+  :root {
+    --wrap-max: 92rem;
+  }
+}

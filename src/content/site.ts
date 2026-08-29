@@ -80,6 +80,6 @@ export const siteContent: SiteContent = {
   seo: {
     title: 'Bouman Digital · Developer portfolio',
     description:
-      'Bouman Digital — portfolio by Philippe Bouman. 19, HBO Informatica student in Leiden. Frontend, web design and interactive digital experiences.',
+      'Bouman Digital — portfolio by Philippe Bouman. Frontend developer and HBO Informatica student in Leiden, Netherlands. Web design, React, Next.js and interactive digital experiences.',
   },
 }
