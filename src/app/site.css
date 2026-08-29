@@ -430,6 +430,7 @@ video {
 .journey {
   position: relative;
   height: 780vh;
+  overflow-x: clip;
 }
 
 .journey.is-mobile {
@@ -459,6 +460,239 @@ video {
   position: relative;
   height: 100%;
   width: 100%;
+  transform-origin: 50% 42%;
+  will-change: transform;
+}
+
+/* Living botanical branch — signature visual through the journey */
+.botanical-branch {
+  position: absolute;
+  top: -5%;
+  bottom: -5%;
+  left: 66%;
+  z-index: 2;
+  width: 34%;
+  color: var(--green);
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+  will-change: transform, opacity, left;
+}
+
+.botanical-branch-parallax {
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+
+.botanical-branch-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.botanical-branch-sway {
+  will-change: transform;
+}
+
+.branch-stem {
+  opacity: 0.78;
+}
+
+.branch-hair,
+.branch-tendril {
+  opacity: 0;
+}
+
+.branch-leaf {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* Typography as construction */
+.type-construct {
+  display: flex;
+  flex-direction: column;
+}
+
+.type-construct-line {
+  display: block;
+}
+
+.type-word {
+  display: inline-block;
+  will-change: transform;
+}
+
+.type-word + .type-word {
+  margin-left: 0.22em;
+}
+
+.type-outline-word.is-outlined {
+  color: transparent;
+  -webkit-text-stroke: 1px var(--green);
+}
+
+/* About composition within journey */
+.zone-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.42fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+}
+
+.zone-intro .text-block {
+  max-width: 100%;
+  width: 100%;
+}
+
+.journey-portrait {
+  margin: 0;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.journey-portrait-frame {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  max-width: 220px;
+  margin-left: auto;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg-soft);
+  box-shadow: var(--shadow-soft);
+}
+
+.journey-portrait-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+/* Work exhibition */
+.journey-project-exhibit {
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
+  gap: 0.85rem;
+  align-items: start;
+}
+
+.project-exhibit-label {
+  margin: 0;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.journey-project-exhibit .journey-project-visual {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  will-change: transform;
+}
+
+.journey-project-exhibit .journey-project-meta {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.opening-visual {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--green);
+  pointer-events: none;
+  will-change: opacity, transform;
+  transform: translate3d(0, 0, 0);
+}
+
+.opening-video-shell {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: var(--bg);
+  transform: translate3d(0, 0, 0) scale(1);
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+.opening-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.55s var(--ease);
+  transform: translateZ(0);
+}
+
+.opening-visual.is-ready .opening-video {
+  opacity: 1;
+}
+
+.opening-svg {
+  position: absolute;
+  inset: -2% -4% -2% 0;
+  z-index: 1;
+  width: 104%;
+  height: 104%;
+  display: block;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.opening-group {
+  will-change: transform;
+  transform: translate3d(46vw, -5vh, 0) rotate(-11deg) scale(0.92);
+  transform-origin: 72% 14%;
+}
+
+.opening-stem {
+  opacity: 0.72;
+}
+
+.opening-hair,
+.opening-branch {
+  opacity: 0;
+}
+
+.opening-arc {
+  opacity: 0;
+}
+
+.opening-leaves {
+  opacity: 0;
+}
+
+.opening-leaf {
+  opacity: 0.44;
+}
+
+.opening-seed {
+  opacity: 0.36;
+}
+
+.opening-nodes {
+  opacity: 0;
+}
+
+.opening-nodes circle {
+  opacity: 0.5;
+}
+
+.opening-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    linear-gradient(90deg, var(--bg) 0%, var(--bg-veil-92) 14%, var(--bg-veil-40) 34%, transparent 54%),
+    linear-gradient(180deg, var(--bg-veil-35) 0%, transparent 22%, transparent 76%, var(--bg-veil-75) 100%);
+  pointer-events: none;
 }
 
 .journey-video-shell {
@@ -495,31 +729,11 @@ video {
   pointer-events: none;
 }
 
-.botanical-lane {
-  position: absolute;
-  top: -4%;
-  bottom: -4%;
-  left: 66%;
-  z-index: 2;
-  width: 34%;
-  color: var(--green);
-  opacity: 0;
-  pointer-events: none;
-  overflow: hidden;
-  will-change: transform, opacity, left;
-}
-
-.botanical-svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-  overflow: visible;
-}
 
 .journey-chapter {
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: 3;
   display: flex;
   align-items: center;
   opacity: 0;
@@ -538,6 +752,7 @@ video {
   padding: calc(var(--header-h) + 1rem) 0 2.5rem;
   display: flex;
   align-items: center;
+  position: relative;
 }
 
 .text-side-left .zone-inner {
@@ -795,7 +1010,7 @@ video {
   left: 0;
   right: 0;
   bottom: 1.25rem;
-  z-index: 2;
+  z-index: 4;
   width: 100%;
   max-width: var(--wrap-max);
   margin-inline: auto;
@@ -858,20 +1073,26 @@ video {
     font-size: clamp(2.6rem, 11vw, 4.2rem);
   }
 
-  .botanical-lane {
+  .botanical-branch {
     width: 22% !important;
     left: auto !important;
     right: 0;
   }
 
   .journey-project-stack {
-    min-height: min(58vh, 500px);
+    min-height: min(62vh, 520px);
   }
 
   .cinema-wash {
     background:
       linear-gradient(180deg, var(--bg-veil-75) 0%, var(--bg-veil-20) 28%, transparent 45%),
       linear-gradient(0deg, var(--bg-veil-92) 0%, var(--bg-veil-35) 30%, transparent 50%);
+  }
+
+  .opening-veil {
+    background:
+      linear-gradient(90deg, var(--bg) 0%, var(--bg-veil-94) 10%, var(--bg-veil-72) 28%, transparent 48%),
+      linear-gradient(180deg, var(--bg-veil-40) 0%, transparent 20%, transparent 78%, var(--bg-veil-85) 100%);
   }
 }
 
@@ -910,8 +1131,51 @@ video {
     line-height: 1.65;
   }
 
-  .botanical-lane {
-    width: 14% !important;
+  .botanical-branch {
+    width: 18% !important;
+    left: auto !important;
+    right: 0;
+  }
+
+  .about-page .about-hero-copy,
+  .about-page .about-editorial-body {
+    padding-right: clamp(2.25rem, 16vw, 3.5rem);
+  }
+
+  .about-page-branch {
+    top: calc(var(--header-h) + env(safe-area-inset-top, 0px));
+    height: calc(100dvh - var(--header-h) - env(safe-area-inset-top, 0px));
+    height: calc(100svh - var(--header-h) - env(safe-area-inset-top, 0px));
+  }
+
+  .opening-svg {
+    grid-template-columns: 1fr;
+  }
+
+  .journey-portrait-frame {
+    max-width: min(42vw, 180px);
+    margin-inline: auto 0;
+  }
+
+  .opening-svg {
+    inset: -1% -2% -1% 0;
+    width: 102%;
+    height: 102%;
+  }
+
+  .opening-group {
+    transform: translate3d(34vw, -4vh, 0) rotate(-7deg) scale(0.86);
+    transform-origin: 88% 12%;
+  }
+
+  .opening-stem {
+    opacity: 0.68;
+  }
+
+  .opening-veil {
+    background:
+      linear-gradient(90deg, var(--bg) 0%, var(--bg-veil-96) 8%, var(--bg-veil-72) 24%, transparent 42%),
+      linear-gradient(180deg, var(--bg-veil-45) 0%, transparent 18%, transparent 80%, var(--bg-veil-88) 100%);
   }
 
   .portrait-frame {
@@ -1868,6 +2132,74 @@ video {
   margin-top: 2.5rem;
 }
 
+.about-page {
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+}
+
+.about-page-branch {
+  position: fixed;
+  top: var(--header-h);
+  height: calc(100dvh - var(--header-h));
+  height: calc(100svh - var(--header-h));
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  contain: layout paint;
+}
+
+.about-page-branch .botanical-branch-parallax,
+.about-page-branch .botanical-branch-svg {
+  height: 100%;
+}
+
+.about-page .wrap {
+  position: relative;
+  z-index: 1;
+}
+
+.about-page .about-hero-copy,
+.about-page .about-editorial-body {
+  min-width: 0;
+}
+
+.about-hero-visual {
+  will-change: transform;
+}
+
+.portrait-frame-inner[data-about-portrait] {
+  will-change: transform;
+}
+
+.about-rule {
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
+}
+
+.about-editorial-rail {
+  transform: scaleY(0.08);
+  transform-origin: top center;
+  will-change: transform, opacity;
+}
+
+.about-outline-line {
+  transition: color 0.6s var(--ease), opacity 0.5s var(--ease);
+}
+
+.about-outline-line.is-filled {
+  color: var(--green-deep);
+  -webkit-text-stroke: 0;
+}
+
+.about-craft-item {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: 0.85rem;
+  align-items: start;
+}
+
 /* ── About editorial ── */
 
 .about-hero {
@@ -1959,13 +2291,6 @@ video {
   margin: 1.75rem 0 0;
   padding-top: 1.5rem;
   border-top: 1px solid var(--line);
-}
-
-.about-craft-item {
-  display: grid;
-  grid-template-columns: 2.5rem minmax(0, 1fr);
-  gap: 0.85rem;
-  align-items: start;
 }
 
 .about-craft-num {
@@ -2193,6 +2518,15 @@ video {
 }
 
 @media (max-width: 900px) {
+  .about-page .about-hero-copy,
+  .about-page .about-editorial-body {
+    padding-right: clamp(2rem, 14vw, 3rem);
+  }
+
+  .about-outline-line.is-filled {
+    color: var(--green-deep);
+  }
+
   .page-hero-grid,
   .about-hero-grid {
     grid-template-columns: 1fr;

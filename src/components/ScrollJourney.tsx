@@ -3,7 +3,17 @@
 import Image from 'next/image'
 import {useEffect, useRef, useState} from 'react'
 import type {SiteContent} from '@/content/site'
-import {BotanicalLine} from '@/components/BotanicalLine'
+import {BotanicalBranch} from '@/components/BotanicalBranch'
+import {OpeningScrollVisual} from '@/components/OpeningScrollVisual'
+import {applyBotanicalBranch, initBotanicalBranch} from '@/lib/botanicalBranchMotion'
+import {applyOpeningVisual, initOpeningPaths} from '@/lib/openingVisualMotion'
+import {
+  applyJourneyCamera,
+  applyProjectExhibition,
+  applyTypeConstruction,
+  type JourneyPointer,
+} from '@/lib/journeyComposition'
+import {applyOpeningVideoShell, createOpeningVideoScrub} from '@/lib/openingVideoScrub'
 
 type Props = {
   content: SiteContent
@@ -29,64 +39,28 @@ function lerp(a: number, b: number, t: number) {
 }
 
 /**
- * Botanical lane side: 0 = left, 1 = right.
- * Opposite of the active text block. Smoothly blends at chapter handoffs.
- */
-function botanicalSide(p: number) {
-  // Text left → line right (1); text right → line left (0)
-  const keys: Array<{at: number; side: number}> = [
-    {at: 0.1, side: 1},
-    {at: 0.28, side: 1},
-    {at: 0.32, side: 0}, // craft — text right
-    {at: 0.45, side: 0},
-    {at: 0.48, side: 1}, // approach / projects / learning — text left
-    {at: 0.85, side: 1},
-    {at: 0.88, side: 0}, // tools — text right
-    {at: 0.94, side: 1}, // contact — text left
-    {at: 1, side: 1},
-  ]
-  if (p <= keys[0].at) return keys[0].side
-  for (let i = 1; i < keys.length; i++) {
-    const prev = keys[i - 1]
-    const next = keys[i]
-    if (p <= next.at) {
-      const t = (p - prev.at) / Math.max(0.001, next.at - prev.at)
-      // ease in-out for calm lane handoff
-      const e = t * t * (3 - 2 * t)
-      return lerp(prev.side, next.side, e)
-    }
-  }
-  return keys[keys.length - 1].side
-}
-
-/**
  * Continuous homepage journey:
- * 1) Existing cinematic video scrub (opening)
- * 2) Botanical SVG lane (decorative divider) + calm typography zones
+ * 1) Scroll-driven organic opening visual
+ * 2) Living botanical branch + calm typography zones
  * Direct DOM / rAF — no React state on scroll.
  */
 export function ScrollJourney({content, reduce}: Props) {
-  const {person, brand, contact, opening, projects} = content
+  const {brand, contact, opening, portrait, projects} = content
 
   const trackRef = useRef<HTMLElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const videoShellRef = useRef<HTMLDivElement>(null)
-  const botanicalRef = useRef<HTMLDivElement>(null)
+  const openingVisualRef = useRef<HTMLDivElement>(null)
+  const branchRef = useRef<HTMLDivElement>(null)
   const progressFillRef = useRef<HTMLDivElement>(null)
   const projectRefs = useRef<(HTMLElement | null)[]>([])
+  const videoScrubRef = useRef(createOpeningVideoScrub())
+  const pointerRef = useRef<JourneyPointer>({x: 0.5, y: 0.5, tx: 0.5, ty: 0.5, active: false})
+  const pointerRafRef = useRef<number | null>(null)
 
-  const rafRef = useRef<number | null>(null)
-  const targetTimeRef = useRef(0)
-  const appliedTimeRef = useRef(-1)
-  const seekingRef = useRef(false)
-  const pendingSeekRef = useRef(false)
-  const durationRef = useRef(0)
-  const frameStepRef = useRef(1 / 24)
   const isMobileRef = useRef(false)
 
-  const [ready, setReady] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [openingReady, setOpeningReady] = useState(false)
 
   const featured = projects.items.filter((p) => p.featured && p.image).slice(0, 3)
 
@@ -100,7 +74,6 @@ export function ScrollJourney({content, reduce}: Props) {
       const mobile = mq.matches
       isMobileRef.current = mobile
       setIsMobile(mobile)
-      frameStepRef.current = mobile ? 1 / 12 : 1 / 24
     }
     update()
     mq.addEventListener('change', update)
@@ -108,155 +81,75 @@ export function ScrollJourney({content, reduce}: Props) {
   }, [])
 
   useEffect(() => {
-    const video = videoRef.current
-    if (!video || reduce) return
+    initOpeningPaths(openingVisualRef.current)
+    initBotanicalBranch(branchRef.current)
+  }, [])
 
-    const onMeta = () => {
-      durationRef.current = video.duration
-      setReady(true)
-      video.pause()
-      try {
-        video.currentTime = 0
-        appliedTimeRef.current = 0
-      } catch {
-        // ignore
-      }
+  useEffect(() => {
+    if (reduce) return
+    const video = openingVisualRef.current?.querySelector<HTMLVideoElement>('[data-opening-video]') ?? null
+    const unbind = videoScrubRef.current.bind(video, isMobileRef.current, () => setOpeningReady(true))
+    return unbind
+  }, [reduce, opening.videoSrc])
+
+  useEffect(() => {
+    if (reduce) return
+    const stage = stageRef.current
+    if (!stage) return
+
+    const pointer = pointerRef.current
+
+    const onMove = (e: PointerEvent) => {
+      const rect = stage.getBoundingClientRect()
+      pointer.x = clamp01((e.clientX - rect.left) / rect.width)
+      pointer.y = clamp01((e.clientY - rect.top) / rect.height)
+      pointer.active = true
     }
 
-    const onSeeked = () => {
-      seekingRef.current = false
-      appliedTimeRef.current = video.currentTime
-      if (pendingSeekRef.current) {
-        pendingSeekRef.current = false
-        scheduleSeek()
-      }
+    const onLeave = () => {
+      pointer.active = false
     }
 
-    video.addEventListener('loadedmetadata', onMeta)
-    video.addEventListener('seeked', onSeeked)
-    if (video.readyState >= 1) onMeta()
+    const tick = () => {
+      pointer.tx += (pointer.x - pointer.tx) * 0.06
+      pointer.ty += (pointer.y - pointer.ty) * 0.06
+      pointerRafRef.current = requestAnimationFrame(tick)
+    }
+
+    pointerRafRef.current = requestAnimationFrame(tick)
+    stage.addEventListener('pointermove', onMove, {passive: true})
+    stage.addEventListener('pointerleave', onLeave)
+
     return () => {
-      video.removeEventListener('loadedmetadata', onMeta)
-      video.removeEventListener('seeked', onSeeked)
+      stage.removeEventListener('pointermove', onMove)
+      stage.removeEventListener('pointerleave', onLeave)
+      if (pointerRafRef.current != null) cancelAnimationFrame(pointerRafRef.current)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [opening.videoSrc, reduce])
-
-  const applySeek = () => {
-    const video = videoRef.current
-    const duration = durationRef.current
-    if (!video || !duration) return
-    if (seekingRef.current) {
-      pendingSeekRef.current = true
-      return
-    }
-
-    const step = frameStepRef.current
-    const quantized = Math.round(targetTimeRef.current / step) * step
-    const next = Math.min(Math.max(0, quantized), Math.max(0, duration - 0.05))
-    const minDelta = isMobileRef.current ? step * 0.9 : step * 0.6
-    if (Math.abs(next - appliedTimeRef.current) < minDelta) return
-
-    seekingRef.current = true
-    try {
-      video.currentTime = next
-    } catch {
-      seekingRef.current = false
-      return
-    }
-
-    window.setTimeout(() => {
-      if (seekingRef.current && Math.abs(video.currentTime - next) < 0.08) {
-        seekingRef.current = false
-        appliedTimeRef.current = video.currentTime
-        if (pendingSeekRef.current) {
-          pendingSeekRef.current = false
-          scheduleSeek()
-        }
-      }
-    }, 80)
-  }
-
-  const scheduleSeek = () => {
-    if (rafRef.current != null) return
-    rafRef.current = requestAnimationFrame(() => {
-      rafRef.current = null
-      applySeek()
-    })
-  }
+  }, [reduce])
 
   useEffect(() => {
     if (reduce) return
     const track = trackRef.current
     if (!track) return
 
-    const VIDEO_END = 0.14
-
     const update = () => {
       const rect = track.getBoundingClientRect()
-      const total = track.offsetHeight - window.innerHeight
+      const vh = window.visualViewport?.height ?? window.innerHeight
+      const total = track.offsetHeight - vh
       const p = total > 0 ? clamp01(-rect.top / total) : 0
       const mobile = isMobileRef.current
 
       const fill = progressFillRef.current
       if (fill) fill.style.transform = `scaleX(${p})`
 
-      // Opening video scrub
-      const duration = durationRef.current
-      if (duration > 0 && p <= VIDEO_END + 0.04) {
-        targetTimeRef.current = clamp01(p / VIDEO_END) * Math.max(0, duration - 0.05)
-        scheduleSeek()
-      }
+      // Opening — scroll-scrubbed video + organic line overlay
+      applyOpeningVideoShell(openingVisualRef.current, p)
+      videoScrubRef.current.scrub(p, mobile)
+      applyOpeningVisual(openingVisualRef.current, p, mobile)
 
-      // Video shell exit
-      const shell = videoShellRef.current
-      if (shell) {
-        if (p < 0.12) {
-          shell.style.opacity = '1'
-          shell.style.transform = 'translate3d(0,0,0) scale(1)'
-        } else if (p < 0.22) {
-          const t = (p - 0.12) / 0.1
-          shell.style.opacity = String(lerp(1, 0, t))
-          shell.style.transform = `translate3d(0, ${lerp(0, -4, t)}%, 0) scale(${lerp(1, 1.04, t)})`
-        } else {
-          shell.style.opacity = '0'
-          shell.style.pointerEvents = 'none'
-        }
-      }
-
-      // Botanical lane — decorative divider in its own zone (never over text)
-      // Side keyframes: 1 = right lane, 0 = left lane. Text sits on the opposite side.
-      const bot = botanicalRef.current
-      if (bot) {
-        if (p < 0.1) {
-          bot.style.opacity = '0'
-        } else {
-          const fadeIn = clamp01((p - 0.1) / 0.05)
-          const projectDim = p > 0.52 && p < 0.76 ? 0.38 : 1
-          bot.style.opacity = String(fadeIn * projectDim)
-
-          const t = clamp01((p - 0.1) / 0.88)
-          const side = botanicalSide(p)
-          // Wind stays inside the lane — small motion only
-          const wind = Math.sin(t * Math.PI * 2.5) * (mobile ? 3 : 5)
-          const y = Math.sin(t * Math.PI * 1.8) * (mobile ? 1.5 : 2.5)
-          const rot = lerp(mobile ? -3 : -6, mobile ? 4 : 7, t) + Math.sin(t * Math.PI * 2) * 1.8
-
-          if (mobile) {
-            bot.style.left = 'auto'
-            bot.style.right = '0'
-            bot.style.width = '22%'
-            bot.style.transform = `translate3d(${wind * 0.35}%, ${y}%, 0) rotate(${rot}deg)`
-          } else {
-            const laneW = 34
-            const leftPct = lerp(0, 100 - laneW, side)
-            bot.style.right = 'auto'
-            bot.style.width = `${laneW}%`
-            bot.style.left = `${leftPct}%`
-            bot.style.transform = `translate3d(${wind}%, ${y}%, 0) rotate(${rot}deg)`
-          }
-        }
-      }
+      applyJourneyCamera(stageRef.current, p, mobile)
+      applyBotanicalBranch(branchRef.current, p, mobile, pointerRef.current)
+      applyTypeConstruction(stageRef.current, p, mobile)
 
       // Chapters
       const chapters = stageRef.current?.querySelectorAll<HTMLElement>('[data-chapter]')
@@ -274,26 +167,12 @@ export function ScrollJourney({content, reduce}: Props) {
         el.setAttribute('aria-hidden', o < 0.2 ? 'true' : 'false')
       })
 
-      // Project focus stack
-      const projStart = 0.61
-      const projEnd = 0.74
-      const els = projectRefs.current.filter(Boolean) as HTMLElement[]
-      const count = els.length
-      if (count > 0 && p >= projStart - 0.04 && p <= projEnd + 0.04) {
-        const local = clamp01((p - projStart) / (projEnd - projStart))
-        els.forEach((el, i) => {
-          const slot = 1 / count
-          const center = (i + 0.5) * slot
-          const focus = clamp01(1 - Math.abs(local - center) / (slot * 1.1))
-          el.style.opacity = String(lerp(0.12, 1, focus))
-          el.style.transform = `translate3d(0, ${lerp(28, 0, focus)}px, 0) scale(${lerp(0.94, 1, focus)})`
-        })
-      } else {
-        els.forEach((el) => {
-          el.style.opacity = '0'
-          el.style.transform = 'translate3d(0, 32px, 0) scale(0.95)'
-        })
-      }
+      applyProjectExhibition(
+        projectRefs.current.filter(Boolean) as HTMLElement[],
+        p,
+        mobile,
+        pointerRef.current,
+      )
     }
 
     let ticking = false
@@ -309,10 +188,13 @@ export function ScrollJourney({content, reduce}: Props) {
     update()
     window.addEventListener('scroll', onScroll, {passive: true})
     window.addEventListener('resize', onScroll, {passive: true})
+    window.visualViewport?.addEventListener('resize', onScroll)
+    window.visualViewport?.addEventListener('scroll', onScroll)
     return () => {
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onScroll)
-      if (rafRef.current != null) cancelAnimationFrame(rafRef.current)
+      window.visualViewport?.removeEventListener('resize', onScroll)
+      window.visualViewport?.removeEventListener('scroll', onScroll)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reduce])
@@ -433,26 +315,16 @@ export function ScrollJourney({content, reduce}: Props) {
 
       <div className="journey-sticky">
         <div className="journey-stage" ref={stageRef}>
-          {/* Keep existing cinematic opening */}
-          <div ref={videoShellRef} className={`journey-video-shell${ready ? ' is-ready' : ''}`}>
-            <video
-              ref={videoRef}
-              className="journey-video"
-              src={opening.videoSrc}
-              poster={opening.posterSrc}
-              muted
-              playsInline
-              preload="auto"
-              disablePictureInPicture
-              aria-hidden="true"
-            />
-            <div className="cinema-wash" aria-hidden="true" />
-          </div>
+          {/* Scroll-driven opening visual — organic line composition */}
+          <OpeningScrollVisual
+            ref={openingVisualRef}
+            className="opening-visual"
+            videoSrc={opening.videoSrc}
+            posterSrc={opening.posterSrc}
+            ready={openingReady}
+          />
 
-          {/* Botanical lane — decorative divider only (clipped to its zone) */}
-          <div className="botanical-lane" ref={botanicalRef} aria-hidden="true">
-            <BotanicalLine className="botanical-svg" />
-          </div>
+          <BotanicalBranch ref={branchRef} />
 
           {/* Opening — cinematic typography (before botanical) */}
           <div
@@ -468,12 +340,17 @@ export function ScrollJourney({content, reduce}: Props) {
                   <span>{brand.line1}</span>
                   <span>{brand.line2}</span>
                 </p>
-                <h1 className="display-xl">
-                  I build
-                  <br />
-                  digital
-                  <br />
-                  experiences.
+                <h1 className="display-xl type-construct">
+                  <span className="type-construct-line" data-line="0">
+                    <span className="type-word">I</span>
+                    <span className="type-word">build</span>
+                  </span>
+                  <span className="type-construct-line" data-line="1">
+                    <span className="type-word">digital</span>
+                  </span>
+                  <span className="type-construct-line" data-line="2">
+                    <span className="type-word">experiences.</span>
+                  </span>
                 </h1>
                 <p className="lead open-lead">
                   I&apos;m Philippe, a 19-year-old developer and HBO Informatica student based in
@@ -500,7 +377,7 @@ export function ScrollJourney({content, reduce}: Props) {
             data-full="0.18"
             data-out="0.30"
           >
-            <div className="wrap zone-inner">
+            <div className="wrap zone-inner zone-intro">
               <div className="text-block">
                 <p className="eyebrow">About</p>
                 <h2 className="display-lg">
@@ -524,6 +401,18 @@ export function ScrollJourney({content, reduce}: Props) {
                   </a>
                 </div>
               </div>
+              <figure className="journey-portrait">
+                <div className="journey-portrait-frame">
+                  <Image
+                    src={portrait}
+                    alt=""
+                    width={480}
+                    height={640}
+                    className="journey-portrait-img"
+                    sizes="(max-width: 768px) 42vw, 220px"
+                  />
+                </div>
+              </figure>
             </div>
           </div>
 
@@ -541,7 +430,7 @@ export function ScrollJourney({content, reduce}: Props) {
                 <h2 className="display-lg">
                   Design ×
                   <br />
-                  Development
+                  <span className="type-outline-word">Development</span>
                 </h2>
                 <p className="lead">I enjoy working where design and technology meet.</p>
                 <div className="craft-list">
@@ -633,9 +522,12 @@ export function ScrollJourney({content, reduce}: Props) {
                     {featured.map((project, i) => (
                       <article
                         key={project.id}
-                        className={`journey-project accent-${project.accent}`}
+                        className={`journey-project journey-project-exhibit accent-${project.accent}`}
                         ref={setProject(i)}
                       >
+                        <p className="project-exhibit-label" aria-hidden="true">
+                          Project {String(i + 1).padStart(2, '0')}
+                        </p>
                         <div className="journey-project-visual">
                           <Image
                             src={project.image!}

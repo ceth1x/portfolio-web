@@ -68,7 +68,7 @@ export const siteContent: SiteContent = {
   },
   opening: {
     videoSrc: '/media/process-cinema.mp4',
-    posterSrc: '/media/process-poster.jpg',
+    posterSrc: '/media/opening-poster.jpg',
   },
   portrait: '/media/philippe.jpg',
   projects: {
