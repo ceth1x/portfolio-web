@@ -100,6 +100,7 @@ export function ContactForm() {
             required
             maxLength={CONTACT_LIMITS.name.max}
             className="contact-input"
+            placeholder="Name"
             aria-invalid={Boolean(fieldErrors.name)}
             aria-describedby={fieldErrors.name ? 'contact-name-error' : undefined}
           />
@@ -123,6 +124,7 @@ export function ContactForm() {
             required
             maxLength={CONTACT_LIMITS.email.max}
             className="contact-input"
+            placeholder="Email"
             aria-invalid={Boolean(fieldErrors.email)}
             aria-describedby={fieldErrors.email ? 'contact-email-error' : undefined}
           />
@@ -135,7 +137,7 @@ export function ContactForm() {
 
         <div className="contact-field contact-field-wide">
           <label className="contact-field-label" htmlFor="contact-subject">
-            Subject <span className="contact-optional">(optional)</span>
+            Subject
           </label>
           <input
             id="contact-subject"
@@ -143,6 +145,7 @@ export function ContactForm() {
             type="text"
             maxLength={CONTACT_LIMITS.subject.max}
             className="contact-input"
+            placeholder="Subject"
             aria-invalid={Boolean(fieldErrors.subject)}
             aria-describedby={fieldErrors.subject ? 'contact-subject-error' : undefined}
           />
@@ -160,10 +163,11 @@ export function ContactForm() {
           <textarea
             id="contact-message"
             name="message"
-            rows={5}
+            rows={6}
             required
             maxLength={CONTACT_LIMITS.message.max}
             className="contact-input contact-textarea"
+            placeholder="Message"
             aria-invalid={Boolean(fieldErrors.message)}
             aria-describedby={fieldErrors.message ? 'contact-message-error' : undefined}
           />
@@ -190,10 +194,11 @@ export function ContactForm() {
       <div className="contact-form-actions">
         <button
           type="submit"
-          className="btn btn-secondary contact-submit"
+          className="btn btn-primary contact-submit"
           disabled={formState === 'submitting'}
         >
           {formState === 'submitting' ? 'Sending…' : 'Send message'}
+          <span aria-hidden="true">→</span>
         </button>
       </div>
     </form>
