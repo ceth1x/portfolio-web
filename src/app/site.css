@@ -615,6 +615,7 @@ video {
   overflow: hidden;
   background: var(--bg);
   color: var(--green);
+  opacity: 1;
   pointer-events: none;
   will-change: opacity, transform;
   transform: translate3d(0, 0, 0);
@@ -754,6 +755,13 @@ video {
 .journey-chapter[data-chapter='opening'] {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
+}
+
+.journey:not(.journey-scroll-active) .journey-chapter[data-chapter='opening'] {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
 }
 
 .zone-inner {

@@ -26,6 +26,7 @@ function clamp01(n: number) {
 
 function chapterOpacity(p: number, enter: number, full: number, exit: number) {
   if (p >= exit) return 0
+  if (enter === 0 && full === 0) return 1
   if (p < enter) return 0
   if (full <= enter) return 1
   if (p < full) return clamp01((p - enter) / Math.max(0.001, full - enter))
@@ -34,6 +35,12 @@ function chapterOpacity(p: number, enter: number, full: number, exit: number) {
   const holdEnd = full + fade * 0.35
   if (p < holdEnd) return 1
   return clamp01(1 - (p - holdEnd) / (exit - holdEnd))
+}
+
+function chapterRise(p: number, enter: number, full: number, o: number) {
+  if (full <= enter) return 0
+  const rise = lerp(18, 0, clamp01((p - enter) / Math.max(0.001, full - enter)))
+  return rise * (1 - o)
 }
 
 function lerp(a: number, b: number, t: number) {
@@ -144,6 +151,8 @@ export function ScrollJourney({content, reduce}: Props) {
       const fill = progressFillRef.current
       if (fill) fill.style.transform = `scaleX(${p})`
 
+      track.classList.toggle('journey-scroll-active', p > 0.002)
+
       // Opening — scroll-scrubbed video + organic line overlay
       applyOpeningVideoShell(openingVisualRef.current, p)
       videoScrubRef.current.scrub(p, mobile)
@@ -160,12 +169,26 @@ export function ScrollJourney({content, reduce}: Props) {
         const full = Number(el.dataset.full)
         const exit = Number(el.dataset.out)
         if (!Number.isFinite(enter)) return
-        const o = chapterOpacity(p, enter, full, exit)
+
+        const isOpening = el.dataset.chapter === 'opening'
+
+        if (isOpening && p <= 0.001) {
+          el.style.removeProperty('opacity')
+          el.style.removeProperty('visibility')
+          el.style.removeProperty('transform')
+          el.style.removeProperty('pointer-events')
+          el.setAttribute('aria-hidden', 'false')
+          return
+        }
+
+        const o = isOpening
+          ? chapterOpacity(p, 0, 0, exit)
+          : chapterOpacity(p, enter, full, exit)
         el.style.opacity = String(o)
         el.style.visibility = o < 0.08 ? 'hidden' : 'visible'
         el.style.pointerEvents = o > 0.55 ? 'auto' : 'none'
-        const rise = lerp(18, 0, clamp01((p - enter) / Math.max(0.001, full - enter)))
-        el.style.transform = `translate3d(0, ${rise * (1 - o)}px, 0)`
+        const rise = chapterRise(p, isOpening ? 0 : enter, isOpening ? 0 : full, o)
+        el.style.transform = rise > 0.01 ? `translate3d(0, ${rise}px, 0)` : 'none'
         el.setAttribute('aria-hidden', o < 0.2 ? 'true' : 'false')
       })
 
@@ -188,11 +211,13 @@ export function ScrollJourney({content, reduce}: Props) {
     }
 
     update()
+    const raf = requestAnimationFrame(update)
     window.addEventListener('scroll', onScroll, {passive: true})
     window.addEventListener('resize', onScroll, {passive: true})
     window.visualViewport?.addEventListener('resize', onScroll)
     window.visualViewport?.addEventListener('scroll', onScroll)
     return () => {
+      cancelAnimationFrame(raf)
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onScroll)
       window.visualViewport?.removeEventListener('resize', onScroll)
