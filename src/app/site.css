@@ -1107,8 +1107,13 @@ video {
 
 @media (max-width: 768px) {
   .journey {
-    --page-pad-x: clamp(1.75rem, 6.5vw, 2rem);
-    --mobile-branch-lane: clamp(2.35rem, 9.5vw, 2.75rem);
+    --page-pad-x: clamp(1.5rem, 6vw, 1.75rem);
+    --mobile-branch-lane: clamp(2.15rem, 8vw, 2.5rem);
+  }
+
+  .journey .wrap {
+    padding-left: max(var(--page-pad-x), env(safe-area-inset-left, 0px));
+    padding-right: max(var(--page-pad-x), env(safe-area-inset-right, 0px));
   }
 
   .text-block,
@@ -1215,8 +1220,34 @@ video {
   }
 
   .journey .botanical-branch {
-    width: 12% !important;
-    max-width: 2.75rem;
+    width: 11% !important;
+    max-width: 2.5rem;
+  }
+
+  .journey .text-block,
+  .journey .text-block-projects,
+  .journey .zone-inner-wide .text-block-projects,
+  .journey .journey-contact .text-block {
+    padding-inline: 0;
+    padding-right: var(--mobile-branch-lane);
+    box-sizing: border-box;
+  }
+
+  .journey .display-xl,
+  .journey .display-lg,
+  .journey .name-stack,
+  .journey .eyebrow,
+  .journey .lead,
+  .journey .meta-line,
+  .journey .craft-list,
+  .journey .tools-grid,
+  .journey .contact-details {
+    max-width: 100%;
+  }
+
+  .journey .contact-detail-value {
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 
   .journey .zone-inner {
@@ -1337,9 +1368,9 @@ video {
 
   .contact-panel {
     grid-template-columns: 1fr;
-    padding: clamp(1.35rem, 4.5vw, 1.65rem);
-    margin-top: 2.5rem;
-    gap: 2rem;
+    padding: clamp(1.75rem, 5vw, 2.25rem) clamp(1.15rem, 3.5vw, 1.35rem);
+    margin-top: 2.75rem;
+    gap: 2.5rem;
   }
 
   .contact-quick-links {
@@ -2120,23 +2151,49 @@ video {
     max-width: 100%;
   }
 
+  .contact-panel-form .contact-field-label {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0 0 0.75rem;
+    padding: 0;
+    overflow: visible;
+    clip: auto;
+    clip-path: none;
+    white-space: normal;
+    border: 0;
+  }
+
   .contact-form-grid {
     grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .contact-field {
+    min-width: 0;
   }
 
   .contact-input {
     font-size: 16px;
-    min-height: 48px;
-    padding: 0.85rem 1rem;
+    min-height: 52px;
+    padding: 0.95rem 1rem;
   }
 
   .contact-textarea {
-    min-height: 9rem;
+    min-height: 11.5rem;
+    padding-top: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .contact-form-actions {
+    margin-top: 2.5rem;
+    padding-top: 0.35rem;
   }
 
   .contact-submit {
     width: 100%;
-    max-width: 16rem;
+    max-width: 100%;
+    min-height: 48px;
   }
 
   .text-cta {
@@ -2175,10 +2232,6 @@ video {
 
   .display-lg {
     font-size: clamp(2.2rem, 10.5vw, 3rem);
-  }
-
-  .contact-submit {
-    max-width: 100%;
   }
 }
 
