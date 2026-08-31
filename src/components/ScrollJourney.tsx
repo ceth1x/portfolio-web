@@ -234,9 +234,8 @@ export function ScrollJourney({content, reduce}: Props) {
               experiences.
             </h1>
             <p className="lead">
-              I&apos;m Philippe, a 19-year-old developer and Informatics student based in the
-              Netherlands. I combine development and design to turn ideas into polished,
-              interactive websites.
+              I&apos;m Philippe, a 19-year-old developer and Informatics student in Leiden. I combine
+              development and design to turn ideas into polished, interactive websites.
             </p>
             <div className="cta-row">
               <a className="btn btn-primary" href="/work">
@@ -377,9 +376,8 @@ export function ScrollJourney({content, reduce}: Props) {
                   </span>
                 </h1>
                 <p className="lead open-lead">
-                  I&apos;m Philippe, a 19-year-old developer and Informatics student based in
-                  the Netherlands. I combine development and design to turn ideas into polished,
-                  interactive websites.
+                  I&apos;m Philippe, a 19-year-old developer and Informatics student in Leiden. I
+                  combine development and design to turn ideas into polished, interactive websites.
                 </p>
                 <div className="cta-row">
                   <a className="text-cta" href="/work">

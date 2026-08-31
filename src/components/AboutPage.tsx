@@ -125,8 +125,8 @@ export function AboutPage({content}: Props) {
             <div ref={ruleRef} className="about-rule" aria-hidden="true" />
             <p className="lead">
               I&apos;m {person.firstName}, a {person.age}-year-old developer and Informatics
-              student based in the Netherlands. I combine development and design to turn ideas into
-              polished, interactive websites.
+              student in Leiden. I combine development and design to turn ideas into polished,
+              interactive websites.
             </p>
           </Reveal>
 
