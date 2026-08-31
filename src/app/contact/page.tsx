@@ -6,14 +6,14 @@ import {siteConfig, siteUrl} from '@/lib/site-config'
 export const metadata: Metadata = {
   title: 'Contact',
   description:
-    'Contact Philippe Bouman at Bouman Digital for frontend development, web design and new project collaborations.',
+    'Contact Philippe Bouman at FrontBlender for frontend development, web design and new project collaborations.',
   alternates: {
     canonical: '/contact',
   },
   openGraph: {
     title: `Contact · ${siteConfig.name}`,
     description:
-      'Contact Philippe Bouman at Bouman Digital for frontend development, web design and new project collaborations.',
+      'Contact Philippe Bouman at FrontBlender for frontend development, web design and new project collaborations.',
     url: `${siteUrl}/contact`,
     images: [{url: siteConfig.ogImage, width: 1200, height: 1200, alt: `${siteConfig.name} logo`}],
   },
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     card: 'summary',
     title: `Contact · ${siteConfig.name}`,
     description:
-      'Contact Philippe Bouman at Bouman Digital for frontend development, web design and new project collaborations.',
+      'Contact Philippe Bouman at FrontBlender for frontend development, web design and new project collaborations.',
     images: [siteConfig.ogImage],
   },
 }

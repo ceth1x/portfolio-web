@@ -1,5 +1,67 @@
 /* Philippe Bouman — editorial creative portfolio */
 
+/* ── Mobile homepage flow (normal scroll, no sticky chapters) ── */
+
+.journey-mobile-flow {
+  display: none;
+  overflow-x: clip;
+}
+
+.journey-cinematic {
+  display: block;
+}
+
+.journey-mobile-section {
+  padding: clamp(4.5rem, 11vw, 7rem) 0;
+}
+
+.journey-mobile-portrait {
+  margin: 0 0 1.75rem;
+}
+
+.journey-mobile-portrait .journey-portrait-frame {
+  max-width: min(46vw, 168px);
+  margin-inline: 0;
+}
+
+.journey-mobile-project-visual {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.journey-mobile-project-visual .journey-project-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.journey-mobile-projects {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px), (pointer: coarse) {
+  .journey-mobile-flow {
+    display: block;
+    --page-pad-x: clamp(1.5rem, 6vw, 1.75rem);
+  }
+
+  .journey-mobile-flow .wrap {
+    padding-left: max(var(--page-pad-x), env(safe-area-inset-left, 0px));
+    padding-right: max(var(--page-pad-x), env(safe-area-inset-right, 0px));
+  }
+
+  .journey-cinematic {
+    display: none;
+  }
+}
+
 :root {
   --bg: #f7f3ec;
   --bg-rgb: 247, 243, 236;

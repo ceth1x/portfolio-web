@@ -6,14 +6,14 @@ import {siteConfig, siteUrl} from '@/lib/site-config'
 export const metadata: Metadata = {
   title: 'About',
   description:
-    'About Philippe Bouman — frontend developer, HBO Informatica student in Leiden, and founder of Bouman Digital.',
+    'About Philippe Bouman — frontend developer, Informatics student in Leiden, and founder of FrontBlender.',
   alternates: {
     canonical: '/about',
   },
   openGraph: {
     title: `About · ${siteConfig.name}`,
     description:
-      'About Philippe Bouman — frontend developer, HBO Informatica student in Leiden, and founder of Bouman Digital.',
+      'About Philippe Bouman — frontend developer, Informatics student in Leiden, and founder of FrontBlender.',
     url: `${siteUrl}/about`,
     images: [{url: siteConfig.ogImage, width: 1200, height: 1200, alt: `${siteConfig.name} logo`}],
   },
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     card: 'summary',
     title: `About · ${siteConfig.name}`,
     description:
-      'About Philippe Bouman — frontend developer, HBO Informatica student in Leiden, and founder of Bouman Digital.',
+      'About Philippe Bouman — frontend developer, Informatics student in Leiden, and founder of FrontBlender.',
     images: [siteConfig.ogImage],
   },
 }

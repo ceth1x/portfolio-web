@@ -55,6 +55,11 @@ export function SiteHeader({brandName}: Props) {
 
   const closeNav = () => setNavOpen(false)
 
+  const onNavClick = () => {
+    closeNav()
+    window.scrollTo(0, 0)
+  }
+
   return (
     <motion.header
       className={`site-header${scrolled ? ' is-scrolled' : ''}`}
@@ -63,9 +68,9 @@ export function SiteHeader({brandName}: Props) {
       transition={{duration: 0.75, ease: easeOut}}
     >
       <div className="wrap header-inner">
-        <Link href="/" className="logo" aria-label={`${brandName} — home`} onClick={closeNav}>
+        <Link href="/" className="logo" aria-label={`${brandName} — home`} onClick={onNavClick}>
           <span className="logo-mark" aria-hidden="true">
-            BD
+            FB
           </span>
         </Link>
 
@@ -112,7 +117,7 @@ export function SiteHeader({brandName}: Props) {
                     exit={reduce ? undefined : {opacity: 0, y: 10}}
                     transition={{duration: 0.4, delay: reduce ? 0 : 0.06 + i * 0.07, ease: easeOut}}
                   >
-                    <Link href={item.href} className="site-nav-link" onClick={closeNav}>
+                    <Link href={item.href} className="site-nav-link" onClick={onNavClick}>
                       {item.label}
                     </Link>
                   </motion.div>

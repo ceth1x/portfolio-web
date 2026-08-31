@@ -101,7 +101,7 @@ const structuredData = {
       ],
       alumniOf: {
         '@type': 'CollegeOrUniversity',
-        name: 'HBO Informatica',
+        name: 'Informatics',
         address: {
           '@type': 'PostalAddress',
           addressLocality: 'Leiden',

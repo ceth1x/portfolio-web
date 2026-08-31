@@ -4,6 +4,7 @@ import Image from 'next/image'
 import {useEffect, useLayoutEffect, useRef, useState} from 'react'
 import type {SiteContent} from '@/content/site'
 import {BotanicalBranch} from '@/components/BotanicalBranch'
+import {JourneyMobileFlow} from '@/components/JourneyMobileFlow'
 import {OpeningScrollVisual} from '@/components/OpeningScrollVisual'
 import {applyBotanicalBranch, initBotanicalBranch} from '@/lib/botanicalBranchMotion'
 import {applyOpeningVisual, initOpeningPaths} from '@/lib/openingVisualMotion'
@@ -14,6 +15,7 @@ import {
   type JourneyPointer,
 } from '@/lib/journeyComposition'
 import {applyOpeningVideoShell, createOpeningVideoScrub} from '@/lib/openingVideoScrub'
+import {useIsMobile} from '@/lib/useIsMobile'
 
 type Props = {
   content: SiteContent
@@ -68,8 +70,12 @@ export function ScrollJourney({content, reduce}: Props) {
 
   const isMobileRef = useRef(false)
 
-  const [isMobile, setIsMobile] = useState(false)
+  const isMobile = useIsMobile()
   const [openingReady, setOpeningReady] = useState(false)
+
+  useEffect(() => {
+    isMobileRef.current = isMobile
+  }, [isMobile])
 
   const featured = projects.items.filter((p) => p.featured && p.image).slice(0, 3)
 
@@ -77,34 +83,22 @@ export function ScrollJourney({content, reduce}: Props) {
     projectRefs.current[index] = el
   }
 
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 768px), (pointer: coarse)')
-    const update = () => {
-      const mobile = mq.matches
-      isMobileRef.current = mobile
-      setIsMobile(mobile)
-    }
-    update()
-    mq.addEventListener('change', update)
-    return () => mq.removeEventListener('change', update)
-  }, [])
-
   useLayoutEffect(() => {
     initOpeningPaths(openingVisualRef.current)
     initBotanicalBranch(branchRef.current)
   }, [])
 
   useEffect(() => {
-    if (reduce) return
+    if (reduce || isMobile) return
     const video = openingVisualRef.current?.querySelector<HTMLVideoElement>('[data-opening-video]') ?? null
-    const unbind = videoScrubRef.current.bind(video, isMobileRef.current, () => setOpeningReady(true))
+    const unbind = videoScrubRef.current.bind(video, false, () => setOpeningReady(true))
     return unbind
-  }, [reduce, opening.videoSrc])
+  }, [reduce, isMobile, opening.videoSrc])
 
   useEffect(() => {
     if (reduce) return
     const stage = stageRef.current
-    if (!stage) return
+    if (!stage || isMobile) return
 
     const pointer = pointerRef.current
 
@@ -134,10 +128,10 @@ export function ScrollJourney({content, reduce}: Props) {
       stage.removeEventListener('pointerleave', onLeave)
       if (pointerRafRef.current != null) cancelAnimationFrame(pointerRafRef.current)
     }
-  }, [reduce])
+  }, [reduce, isMobile])
 
   useLayoutEffect(() => {
-    if (reduce) return
+    if (reduce || isMobile) return
     const track = trackRef.current
     if (!track) return
 
@@ -224,7 +218,7 @@ export function ScrollJourney({content, reduce}: Props) {
       window.visualViewport?.removeEventListener('scroll', onScroll)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reduce])
+  }, [reduce, isMobile])
 
   if (reduce) {
     return (
@@ -240,7 +234,7 @@ export function ScrollJourney({content, reduce}: Props) {
               experiences.
             </h1>
             <p className="lead">
-              I&apos;m Philippe, a 19-year-old developer and HBO Informatica student based in the
+              I&apos;m Philippe, a 19-year-old developer and Informatics student based in the
               Netherlands. I combine development and design to turn ideas into polished,
               interactive websites.
             </p>
@@ -273,7 +267,7 @@ export function ScrollJourney({content, reduce}: Props) {
                 an idea to something people can actually use.
               </p>
               <p className="muted">
-                Currently studying HBO Informatica in Leiden. Completed part of Harvard&apos;s CS50x
+                Currently studying Informatics in Leiden. Completed part of Harvard&apos;s CS50x
                 course.
               </p>
             </div>
@@ -328,11 +322,14 @@ export function ScrollJourney({content, reduce}: Props) {
   }
 
   return (
-    <section
-      ref={trackRef}
-      className={`journey${isMobile ? ' is-mobile' : ''}`}
-      aria-label="Portfolio"
-    >
+    <>
+      <JourneyMobileFlow content={content} />
+      <section
+        ref={trackRef}
+        className={`journey journey-cinematic${isMobile ? ' is-mobile' : ''}`}
+        aria-hidden={isMobile}
+        aria-label="Portfolio"
+      >
       <div className="journey-anchor" id="top" style={{top: '0%'}} />
       <div className="journey-anchor" id="about" style={{top: '18%'}} />
       <div className="journey-anchor" id="craft" style={{top: '32%'}} />
@@ -380,7 +377,7 @@ export function ScrollJourney({content, reduce}: Props) {
                   </span>
                 </h1>
                 <p className="lead open-lead">
-                  I&apos;m Philippe, a 19-year-old developer and HBO Informatica student based in
+                  I&apos;m Philippe, a 19-year-old developer and Informatics student based in
                   the Netherlands. I combine development and design to turn ideas into polished,
                   interactive websites.
                 </p>
@@ -420,7 +417,7 @@ export function ScrollJourney({content, reduce}: Props) {
                   From programming and problem-solving to visual design, I enjoy taking something
                   from an idea to something people can actually use.
                 </p>
-                <p className="meta-line">Currently studying HBO Informatica in Leiden.</p>
+                <p className="meta-line">Currently studying Informatics in Leiden.</p>
                 <p className="meta-line">Completed part of Harvard&apos;s CS50x course.</p>
                 <div className="cta-row">
                   <a className="text-cta" href="/about">
@@ -701,5 +698,6 @@ export function ScrollJourney({content, reduce}: Props) {
         </div>
       </div>
     </section>
+    </>
   )
 }

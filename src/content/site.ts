@@ -50,16 +50,16 @@ export type SiteContent = {
 
 export const siteContent: SiteContent = {
   brand: {
-    name: 'Bouman Digital',
-    line1: 'Bouman',
-    line2: 'Digital',
+    name: 'FrontBlender',
+    line1: 'Front',
+    line2: 'Blender',
   },
   person: {
     name: 'Philippe Bouman',
     firstName: 'Philippe',
     lastName: 'Bouman',
     age: 19,
-    role: 'HBO Informatica · Leiden',
+    role: 'Informatics · Leiden',
   },
   contact: {
     email: 'boumanphilippe@gmail.com',
@@ -78,8 +78,8 @@ export const siteContent: SiteContent = {
     text: 'Designing & building digital experiences.',
   },
   seo: {
-    title: 'Bouman Digital · Developer portfolio',
+    title: 'FrontBlender · Developer portfolio',
     description:
-      'Bouman Digital — portfolio by Philippe Bouman. Frontend developer and HBO Informatica student in Leiden, Netherlands. Web design, React, Next.js and interactive digital experiences.',
+      'FrontBlender — portfolio by Philippe Bouman. Frontend developer and Informatics student in Leiden, Netherlands. Web design, React, Next.js and interactive digital experiences.',
   },
 }

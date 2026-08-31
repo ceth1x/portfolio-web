@@ -112,8 +112,8 @@ export async function POST(request: NextRequest) {
 
   const resend = new Resend(apiKey)
   const subjectLine = payload.subject
-    ? `[Bouman Digital] ${payload.subject}`
-    : `[Bouman Digital] Message from ${payload.name}`
+    ? `[FrontBlender] ${payload.subject}`
+    : `[FrontBlender] Message from ${payload.name}`
 
   const html = `
     <div style="font-family: system-ui, sans-serif; line-height: 1.6; color: #1c2a22;">

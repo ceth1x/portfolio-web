@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" role="img" aria-label="Bouman Digital">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" role="img" aria-label="FrontBlender">
   <rect width="32" height="32" rx="6" fill="#1f4a36"/>
   <text
     x="16"
@@ -9,5 +9,5 @@
     font-weight="700"
     fill="#ffffff"
     letter-spacing="0.6"
-  >BD</text>
+  >FB</text>
 </svg>

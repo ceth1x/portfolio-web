@@ -8,6 +8,7 @@ import {BotanicalBranch} from '@/components/BotanicalBranch'
 import {Reveal} from '@/components/motion/Reveal'
 import {applyAboutPageMotion, initAboutPage} from '@/lib/aboutPageMotion'
 import type {JourneyPointer} from '@/lib/journeyComposition'
+import {useIsMobile} from '@/lib/useIsMobile'
 
 type Props = {
   content: SiteContent
@@ -22,23 +23,15 @@ export function AboutPage({content}: Props) {
   const ruleRef = useRef<HTMLDivElement>(null)
   const pointerRef = useRef<JourneyPointer>({x: 0.5, y: 0.5, tx: 0.5, ty: 0.5, active: false})
   const railsRef = useRef<HTMLElement[]>([])
-  const isMobileRef = useRef(false)
+  const isMobile = useIsMobile()
   const [reduceMotion, setReduceMotion] = useState(false)
 
   useEffect(() => {
-    const mq = window.matchMedia('(max-width: 768px), (pointer: coarse)')
     const motionMq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const update = () => {
-      isMobileRef.current = mq.matches
-      setReduceMotion(motionMq.matches)
-    }
+    const update = () => setReduceMotion(motionMq.matches)
     update()
-    mq.addEventListener('change', update)
     motionMq.addEventListener('change', update)
-    return () => {
-      mq.removeEventListener('change', update)
-      motionMq.removeEventListener('change', update)
-    }
+    return () => motionMq.removeEventListener('change', update)
   }, [])
 
   useEffect(() => {
@@ -49,7 +42,7 @@ export function AboutPage({content}: Props) {
   }, [])
 
   useEffect(() => {
-    if (reduceMotion) return
+    if (reduceMotion || isMobile) return
     const main = mainRef.current
     if (!main) return
 
@@ -82,7 +75,7 @@ export function AboutPage({content}: Props) {
         rule: ruleRef.current,
         rails: railsRef.current,
         outline: main.querySelector<HTMLElement>('.about-outline-line'),
-        mobile: isMobileRef.current,
+        mobile: false,
         pointer,
       })
     }
@@ -114,7 +107,7 @@ export function AboutPage({content}: Props) {
       main.removeEventListener('pointerleave', onLeave)
       if (raf != null) cancelAnimationFrame(raf)
     }
-  }, [reduceMotion])
+  }, [reduceMotion, isMobile])
 
   return (
     <main id="main" ref={mainRef} className="page-main about-page">
@@ -131,7 +124,7 @@ export function AboutPage({content}: Props) {
             </h1>
             <div ref={ruleRef} className="about-rule" aria-hidden="true" />
             <p className="lead">
-              I&apos;m {person.firstName}, a {person.age}-year-old developer and HBO Informatica
+              I&apos;m {person.firstName}, a {person.age}-year-old developer and Informatics
               student based in the Netherlands. I combine development and design to turn ideas into
               polished, interactive websites.
             </p>
@@ -173,7 +166,7 @@ export function AboutPage({content}: Props) {
               an idea to something people can actually use.
             </p>
             <div className="about-meta-row">
-              <p className="meta-line">Currently studying HBO Informatica in Leiden.</p>
+              <p className="meta-line">Currently studying Informatics in Leiden.</p>
               <p className="meta-line">Completed part of Harvard&apos;s CS50x course.</p>
             </div>
           </Reveal>

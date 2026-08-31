@@ -2,8 +2,9 @@
 
 import {AnimatePresence, motion, useReducedMotion} from 'motion/react'
 import {usePathname} from 'next/navigation'
-import type {ReactNode} from 'react'
+import {useEffect, type ReactNode} from 'react'
 import {easeOut} from '@/lib/motion'
+import {useIsMobile} from '@/lib/useIsMobile'
 
 type Props = {
   children: ReactNode
@@ -12,9 +13,14 @@ type Props = {
 export function PageTransition({children}: Props) {
   const pathname = usePathname()
   const reduce = useReducedMotion()
+  const isMobile = useIsMobile()
   const isHome = pathname === '/'
 
-  if (reduce || isHome) {
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+
+  if (reduce || isHome || isMobile) {
     return <div className="page-shell">{children}</div>
   }
 
