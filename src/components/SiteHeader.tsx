@@ -74,7 +74,11 @@ export function SiteHeader({brandName}: Props) {
           </span>
         </Link>
 
-        <button
+        <div className="header-actions">
+          <Link href="/contact" className="header-cta" onClick={onNavClick}>
+            Start a project
+          </Link>
+          <button
           className={`nav-toggle${navOpen ? ' is-open' : ''}`}
           type="button"
           aria-label={navOpen ? 'Close menu' : 'Open menu'}
@@ -89,6 +93,7 @@ export function SiteHeader({brandName}: Props) {
             <span />
           </span>
         </button>
+        </div>
       </div>
 
       <AnimatePresence>

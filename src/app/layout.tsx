@@ -1,8 +1,10 @@
 import type {Metadata, Viewport} from 'next'
 import {Fraunces, Manrope} from 'next/font/google'
 import {SiteShell} from '@/components/SiteShell'
+import {StructuredData} from '@/components/StructuredData'
 import {siteContent} from '@/content/site'
 import {siteConfig, siteUrl} from '@/lib/site-config'
+import {globalStructuredData} from '@/lib/structured-data'
 import './site.css'
 
 const display = Fraunces({
@@ -17,13 +19,6 @@ const body = Manrope({
   weight: ['400', '500', '600', '700'],
 })
 
-const ogImage = {
-  url: siteConfig.ogImage,
-  width: 1200,
-  height: 1200,
-  alt: `${siteConfig.name} logo`,
-}
-
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
@@ -32,7 +27,7 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   keywords: [...siteConfig.keywords],
-  authors: [{name: siteConfig.personName, url: siteUrl}],
+  authors: [{name: siteConfig.personName, url: `${siteUrl}/about`}],
   creator: siteConfig.personName,
   publisher: siteConfig.name,
   applicationName: siteConfig.name,
@@ -48,9 +43,6 @@ export const metadata: Metadata = {
       'max-video-preview': -1,
     },
   },
-  alternates: {
-    canonical: '/',
-  },
   openGraph: {
     type: 'website',
     locale: siteConfig.locale,
@@ -58,13 +50,11 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     title: siteConfig.title,
     description: siteConfig.description,
-    images: [ogImage],
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: siteConfig.title,
     description: siteConfig.description,
-    images: [siteConfig.ogImage],
   },
 }
 
@@ -73,72 +63,11 @@ export const viewport: Viewport = {
   colorScheme: 'light',
 }
 
-const structuredData = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'Organization',
-      '@id': `${siteUrl}/#organization`,
-      name: siteConfig.name,
-      url: siteUrl,
-      logo: `${siteUrl}${siteConfig.ogImage}`,
-      email: siteConfig.email,
-    },
-    {
-      '@type': 'Person',
-      '@id': `${siteUrl}/#person`,
-      name: siteConfig.personName,
-      url: siteUrl,
-      email: siteConfig.email,
-      jobTitle: 'Frontend Developer',
-      worksFor: {'@id': `${siteUrl}/#organization`},
-      knowsAbout: [
-        'Web development',
-        'Frontend development',
-        'UI design',
-        'React',
-        'Next.js',
-      ],
-      alumniOf: {
-        '@type': 'CollegeOrUniversity',
-        name: 'Informatics',
-        address: {
-          '@type': 'PostalAddress',
-          addressLocality: 'Leiden',
-          addressCountry: 'NL',
-        },
-      },
-    },
-    {
-      '@type': 'WebSite',
-      '@id': `${siteUrl}/#website`,
-      url: siteUrl,
-      name: siteConfig.name,
-      description: siteConfig.description,
-      publisher: {'@id': `${siteUrl}/#organization`},
-      inLanguage: 'en-NL',
-    },
-    {
-      '@type': 'WebPage',
-      '@id': `${siteUrl}/#webpage`,
-      url: siteUrl,
-      name: siteConfig.title,
-      description: siteConfig.description,
-      isPartOf: {'@id': `${siteUrl}/#website`},
-      about: {'@id': `${siteUrl}/#person`},
-      inLanguage: 'en-NL',
-    },
-  ],
-}
-
 export default function RootLayout({children}: LayoutProps<'/'>) {
   return (
     <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{__html: JSON.stringify(structuredData)}}
-        />
+        <StructuredData data={globalStructuredData} />
         <a href="#main" className="skip-link">
           Skip to content
         </a>

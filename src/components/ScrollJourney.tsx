@@ -56,7 +56,7 @@ function lerp(a: number, b: number, t: number) {
  * Direct DOM / rAF — no React state on scroll.
  */
 export function ScrollJourney({content, reduce}: Props) {
-  const {brand, contact, opening, portrait, projects} = content
+  const {brand, contact, hero, opening, person, portrait, projects} = content
 
   const trackRef = useRef<HTMLElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
@@ -233,16 +233,13 @@ export function ScrollJourney({content, reduce}: Props) {
               <br />
               experiences.
             </h1>
-            <p className="lead">
-              I&apos;m Philippe, a 19-year-old developer and Informatics student in Leiden. I combine
-              development and design to turn ideas into polished, interactive websites.
-            </p>
+            <p className="lead">{hero.lead}</p>
             <div className="cta-row">
               <a className="btn btn-primary" href="/work">
-                View my work
+                Explore my work
               </a>
               <a className="btn btn-secondary" href="/contact">
-                Get in touch
+                Start a project
               </a>
             </div>
           </div>
@@ -285,7 +282,13 @@ export function ScrollJourney({content, reduce}: Props) {
                   {project.image ? (
                     <div className="project-visual">
                       <div className="project-image-wrap">
-                        <Image src={project.image} alt="" fill className="project-image" sizes="100vw" />
+                        <Image
+                          src={project.image}
+                          alt={`${project.title} — ${project.subtitle}`}
+                          fill
+                          className="project-image"
+                          sizes="100vw"
+                        />
                       </div>
                     </div>
                   ) : null}
@@ -322,7 +325,9 @@ export function ScrollJourney({content, reduce}: Props) {
 
   return (
     <>
-      <JourneyMobileFlow content={content} />
+      <div aria-hidden={isMobile ? undefined : true}>
+        <JourneyMobileFlow content={content} />
+      </div>
       <section
         ref={trackRef}
         className={`journey journey-cinematic${isMobile ? ' is-mobile' : ''}`}
@@ -375,16 +380,13 @@ export function ScrollJourney({content, reduce}: Props) {
                     <span className="type-word">experiences.</span>
                   </span>
                 </h1>
-                <p className="lead open-lead">
-                  I&apos;m Philippe, a 19-year-old developer and Informatics student in Leiden. I
-                  combine development and design to turn ideas into polished, interactive websites.
-                </p>
+                <p className="lead open-lead">{hero.lead}</p>
                 <div className="cta-row">
                   <a className="text-cta" href="/work">
-                    View my work
+                    Explore my work
                   </a>
                   <a className="text-cta text-cta-muted" href="/contact">
-                    Get in touch
+                    Start a project
                   </a>
                 </div>
               </div>
@@ -427,7 +429,7 @@ export function ScrollJourney({content, reduce}: Props) {
                 <div className="journey-portrait-frame">
                   <Image
                     src={portrait}
-                    alt=""
+                    alt={`Portrait of ${person.name}`}
                     width={480}
                     height={640}
                     className="journey-portrait-img"
@@ -553,7 +555,7 @@ export function ScrollJourney({content, reduce}: Props) {
                         <div className="journey-project-visual">
                           <Image
                             src={project.image!}
-                            alt=""
+                            alt={`${project.title} — ${project.subtitle}`}
                             fill
                             sizes="(max-width: 768px) 88vw, 58vw"
                             className="journey-project-image"

@@ -1,31 +1,24 @@
-import type {Metadata} from 'next'
 import {ContactPage} from '@/components/ContactPage'
+import {StructuredData} from '@/components/StructuredData'
 import {siteContent} from '@/content/site'
-import {siteConfig, siteUrl} from '@/lib/site-config'
+import {buildPageMetadata} from '@/lib/metadata'
+import {contactPageStructuredData} from '@/lib/structured-data'
 
-export const metadata: Metadata = {
-  title: 'Contact',
-  description:
-    'Contact Philippe Bouman at FrontBlender for frontend development, web design and new project collaborations.',
-  alternates: {
-    canonical: '/contact',
-  },
-  openGraph: {
-    title: `Contact · ${siteConfig.name}`,
-    description:
-      'Contact Philippe Bouman at FrontBlender for frontend development, web design and new project collaborations.',
-    url: `${siteUrl}/contact`,
-    images: [{url: siteConfig.ogImage, width: 1200, height: 1200, alt: `${siteConfig.name} logo`}],
-  },
-  twitter: {
-    card: 'summary',
-    title: `Contact · ${siteConfig.name}`,
-    description:
-      'Contact Philippe Bouman at FrontBlender for frontend development, web design and new project collaborations.',
-    images: [siteConfig.ogImage],
-  },
-}
+const title = 'Contact — Start a Project'
+const description =
+  'Ready for a new website? Contact FrontBlender to discuss web design, development and your next project in the Netherlands.'
+
+export const metadata = buildPageMetadata({
+  title,
+  description,
+  path: '/contact',
+})
 
 export default function Contact() {
-  return <ContactPage content={siteContent} />
+  return (
+    <>
+      <StructuredData data={contactPageStructuredData()} />
+      <ContactPage content={siteContent} />
+    </>
+  )
 }

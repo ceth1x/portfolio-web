@@ -284,10 +284,33 @@ video {
 
 .header-inner {
   pointer-events: auto;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
   gap: 1rem;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-left: auto;
+}
+
+.header-cta {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  text-decoration: none;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.25s var(--ease);
+}
+
+.header-cta:hover {
+  color: var(--green);
 }
 
 .site-header .nav-overlay {
@@ -2089,6 +2112,12 @@ video {
   margin: 0;
 }
 
+.footer-meta {
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+  margin: 0.35rem 0 0;
+}
+
 .footer-nav {
   display: flex;
   gap: 1.5rem;
@@ -2115,10 +2144,20 @@ video {
 }
 
 .footer-copy,
-.footer-meta {
+.footer-meta,
+.footer-email {
   font-size: 0.82rem;
   color: var(--ink-muted);
   margin: 0;
+}
+
+.footer-email {
+  text-decoration: none;
+  transition: color 0.25s var(--ease);
+}
+
+.footer-email:hover {
+  color: var(--green);
 }
 
 /* ── Mobile bar ── */

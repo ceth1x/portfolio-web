@@ -82,7 +82,7 @@ function IconSend() {
 }
 
 export function ContactPage({content}: Props) {
-  const {contact} = content
+  const {brand, contact} = content
   const mailto = `mailto:${contact.email}`
   const tel = `tel:${contact.phone}`
 
@@ -91,11 +91,11 @@ export function ContactPage({content}: Props) {
       <section className="page-hero page-hero-contact">
         <div className="wrap contact-page">
           <header className="contact-hero">
-            <p className="eyebrow">Get in touch</p>
+            <p className="eyebrow">Start a project</p>
             <h1 className="display-lg contact-hero-title">Let&apos;s build something great.</h1>
             <p className="lead contact-hero-lead">
-              Have a project in mind or want to work together? Fill in the form below or reach out
-              directly.
+              {brand.name} designs and builds custom websites for clients in the Netherlands. Tell me
+              about your project — I&apos;m available for new web design and development work.
             </p>
 
             <div className="contact-quick-links">
@@ -116,11 +116,11 @@ export function ContactPage({content}: Props) {
               <ContactForm />
             </div>
 
-            <aside className="contact-panel-aside" aria-label="Contact information">
-              <h2 className="contact-aside-title">I usually respond within 24 hours.</h2>
+            <aside className="contact-panel-aside" aria-label="What to expect">
+              <p className="contact-aside-title">I usually respond within 24 hours.</p>
               <p className="contact-aside-copy">
-                I&apos;m always open to discussing new projects, creative ideas or opportunities to
-                be part of your vision.
+                Whether you need a new website, a redesign or help bringing an idea to life — share a
+                few details and we can explore whether {brand.name} is the right fit.
               </p>
 
               <ul className="contact-benefits">

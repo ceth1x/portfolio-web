@@ -13,7 +13,7 @@ type Props = {
  * Keeps artistic typography and spacing without sticky chapter crossfades.
  */
 export function JourneyMobileFlow({content}: Props) {
-  const {brand, contact, portrait, projects} = content
+  const {brand, contact, hero, person, portrait, projects} = content
   const featured = projects.items.filter((p) => p.featured && p.image).slice(0, 3)
 
   return (
@@ -32,16 +32,13 @@ export function JourneyMobileFlow({content}: Props) {
               <br />
               experiences.
             </h1>
-            <p className="lead">
-              I&apos;m Philippe, a 19-year-old developer and Informatics student in Leiden. I combine
-              development and design to turn ideas into polished, interactive websites.
-            </p>
+            <p className="lead">{hero.lead}</p>
             <div className="cta-row">
               <a className="btn btn-primary" href="/work">
-                View my work
+                Explore my work
               </a>
               <a className="btn btn-secondary" href="/contact">
-                Get in touch
+                Start a project
               </a>
             </div>
           </Reveal>
@@ -55,7 +52,7 @@ export function JourneyMobileFlow({content}: Props) {
               <div className="journey-portrait-frame">
                 <Image
                   src={portrait}
-                  alt=""
+                  alt={`Portrait of ${person.name}`}
                   width={480}
                   height={640}
                   className="journey-portrait-img"
@@ -167,7 +164,7 @@ export function JourneyMobileFlow({content}: Props) {
                     <div className="journey-project-visual journey-mobile-project-visual">
                       <Image
                         src={project.image!}
-                        alt=""
+                        alt={`${project.title} — ${project.subtitle}`}
                         width={800}
                         height={450}
                         className="journey-project-image"

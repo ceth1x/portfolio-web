@@ -1,31 +1,24 @@
-import type {Metadata} from 'next'
 import {AboutPage} from '@/components/AboutPage'
+import {StructuredData} from '@/components/StructuredData'
 import {siteContent} from '@/content/site'
-import {siteConfig, siteUrl} from '@/lib/site-config'
+import {buildPageMetadata} from '@/lib/metadata'
+import {aboutPageStructuredData} from '@/lib/structured-data'
 
-export const metadata: Metadata = {
-  title: 'About',
-  description:
-    'About Philippe Bouman — frontend developer, Informatics student in Leiden, and founder of FrontBlender.',
-  alternates: {
-    canonical: '/about',
-  },
-  openGraph: {
-    title: `About · ${siteConfig.name}`,
-    description:
-      'About Philippe Bouman — frontend developer, Informatics student in Leiden, and founder of FrontBlender.',
-    url: `${siteUrl}/about`,
-    images: [{url: siteConfig.ogImage, width: 1200, height: 1200, alt: `${siteConfig.name} logo`}],
-  },
-  twitter: {
-    card: 'summary',
-    title: `About · ${siteConfig.name}`,
-    description:
-      'About Philippe Bouman — frontend developer, Informatics student in Leiden, and founder of FrontBlender.',
-    images: [siteConfig.ogImage],
-  },
-}
+const title = 'About — Web Design & Development'
+const description =
+  'Meet Philippe Bouman, founder of FrontBlender — a web designer and developer in the Netherlands creating custom, modern websites for clients.'
+
+export const metadata = buildPageMetadata({
+  title,
+  description,
+  path: '/about',
+})
 
 export default function About() {
-  return <AboutPage content={siteContent} />
+  return (
+    <>
+      <StructuredData data={aboutPageStructuredData()} />
+      <AboutPage content={siteContent} />
+    </>
+  )
 }

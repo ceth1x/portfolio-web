@@ -7,7 +7,7 @@ type Props = {
 }
 
 export function WorkPage({content}: Props) {
-  const {projects} = content
+  const {brand, projects} = content
   const items = projects.items
 
   return (
@@ -22,8 +22,8 @@ export function WorkPage({content}: Props) {
           </h1>
           <p className="lead">
             {items.length > 0
-              ? "A selection of projects I've designed and built."
-              : 'New projects will appear here as they are completed.'}
+              ? `A selection of websites and digital work designed and built by ${brand.name}.`
+              : `${brand.name} creates custom websites with a focus on design, performance and usability. New case studies will appear here as projects are completed.`}
           </p>
         </div>
       </section>
@@ -37,7 +37,7 @@ export function WorkPage({content}: Props) {
                   <div className="work-visual">
                     <Image
                       src={project.image}
-                      alt=""
+                      alt={`${project.title} — ${project.subtitle}`}
                       fill
                       className="work-image"
                       sizes="(max-width: 900px) 88vw, 960px"
@@ -59,13 +59,20 @@ export function WorkPage({content}: Props) {
             ))}
           </div>
         ) : (
-          <div className="wrap prose-narrow">
-            <p className="lead muted">No projects listed yet.</p>
+          <div className="wrap prose-narrow work-empty">
+            <p className="lead">
+              I work on website design, UI and frontend development — from first concept to a
+              polished, responsive site ready to launch.
+            </p>
+            <p className="lead muted">
+              If you&apos;re looking for a custom website in the Netherlands, I&apos;d love to hear
+              about your project.
+            </p>
           </div>
         )}
         <div className="wrap prose-narrow work-footer-cta">
           <Link href="/contact" className="text-cta">
-            Get in touch →
+            Start a project →
           </Link>
         </div>
       </section>

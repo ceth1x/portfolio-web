@@ -39,12 +39,12 @@ export type SiteContent = {
   projects: {
     items: Project[]
   }
-  seo: {
-    title: string
-    description: string
-  }
   footer: {
     text: string
+    location: string
+  }
+  hero: {
+    lead: string
   }
 }
 
@@ -59,7 +59,7 @@ export const siteContent: SiteContent = {
     firstName: 'Philippe',
     lastName: 'Bouman',
     age: 19,
-    role: 'Informatics · Leiden',
+    role: 'Web design & development · Netherlands',
   },
   contact: {
     email: 'boumanphilippe@gmail.com',
@@ -75,11 +75,11 @@ export const siteContent: SiteContent = {
     items: [],
   },
   footer: {
-    text: 'Designing & building digital experiences.',
+    text: 'Web design & development for distinctive brands.',
+    location: 'Netherlands',
   },
-  seo: {
-    title: 'FrontBlender · Developer portfolio',
-    description:
-      'FrontBlender — portfolio by Philippe Bouman. Frontend developer and Informatics student in Leiden, Netherlands. Web design, React, Next.js and interactive digital experiences.',
+  hero: {
+    lead:
+      'I\'m Philippe, founder of FrontBlender. I design and build custom websites for clients in the Netherlands — combining thoughtful design, modern development and polished user experiences.',
   },
 }

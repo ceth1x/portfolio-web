@@ -1,27 +1,38 @@
-const DEFAULT_SITE_URL = 'https://boumandigital.com'
+const DEFAULT_SITE_URL = 'https://frontblender.com'
 
 export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? DEFAULT_SITE_URL).replace(/\/$/, '')
 
 export const siteConfig = {
   name: 'FrontBlender',
   personName: 'Philippe Bouman',
-  title: 'FrontBlender — Philippe Bouman · Frontend developer',
+  title: 'FrontBlender — Web Design & Development',
   description:
-    'Portfolio of Philippe Bouman, founder of FrontBlender. Frontend developer and Informatics student in Leiden, Netherlands — web design, React, Next.js and interactive digital experiences.',
+    'FrontBlender creates distinctive, high-performance websites for clients in the Netherlands — combining thoughtful design, modern development and seamless user experiences.',
   keywords: [
     'FrontBlender',
+    'web design',
+    'website development',
+    'custom websites',
+    'web developer Netherlands',
+    'website designer',
+    'frontend development',
+    'responsive web design',
     'Philippe Bouman',
-    'frontend developer',
-    'web developer',
-    'portfolio',
     'Leiden',
     'Netherlands',
     'Next.js',
     'React',
-    'web design',
-    'Informatics',
   ],
   locale: 'en_NL',
-  ogImage: '/media/bd-logo.png',
   email: 'boumanphilippe@gmail.com',
+  phone: '+31610279351',
+  areaServed: 'Netherlands',
+  services: [
+    'Website design',
+    'Website development',
+    'Custom websites',
+    'UI design',
+    'Frontend development',
+    'Responsive web design',
+  ],
 } as const
